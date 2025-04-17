@@ -1,7 +1,7 @@
 import argparse
 
 def add_task(args):
-    print("Dodano zadanie.")
+    print("Zadanie {} zostało zapisane.".format(args.task_content))
 
 def main():
     parser = argparse.ArgumentParser(prog="task-cli", description="Ten program służy do organizowania zadań.") 
