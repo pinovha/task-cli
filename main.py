@@ -1,7 +1,38 @@
 import argparse
+import os
+import json
 
-def add_task(args):
-    print("Zadanie {} zostało zapisane.".format(args.task_content))
+def add_task(args, status="in-progress"):
+    task_data = read_json()
+    if task_data:
+        new_id = max(task["id"] for task in task_data) + 1
+    else:
+        new_id = 1
+
+    new_task = {
+        "id": new_id,
+        "description": args.task_content,
+        "status": status 
+    }
+    
+    task_data.append(new_task)
+    write_json(task_data)
+
+    print(""" 
+    Zadanie {} zostało zapisane.
+    Id: {}.
+    """.format(args.task_content, new_id))
+
+def read_json():
+    if os.path.exists("data.json") and os.path.getsize("data.json") > 0:
+        with open('data.json', 'r') as f:
+            return json.load(f) 
+    else:
+        return []
+
+def write_json(data):
+    with open("data.json", "w") as f:
+        json.dump(data, f, indent=4)
 
 def main():
     parser = argparse.ArgumentParser(prog="task-cli", description="Ten program służy do organizowania zadań.") 
@@ -20,7 +51,7 @@ def main():
     else:
         parser.print_help()
         
-
+    
 
 
 
