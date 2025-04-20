@@ -23,6 +23,16 @@ def add_task(args, status="in-progress"):
     Id: {}.
     """.format(args.task_content, new_id))
 
+def list_tasks(args):
+    task_data = read_json()
+    for item in task_data:
+        id, description, status = item.values()
+        print(""" 
+        Id: {}
+        Opis: {}
+        Status: {}
+        """.format(id, description, status))
+        
 def read_json():
     if os.path.exists("data.json") and os.path.getsize("data.json") > 0:
         with open('data.json', 'r') as f:
@@ -43,6 +53,9 @@ def main():
     add_parser.add_argument("task_content", help="Treść zadania")
     add_parser.set_defaults(func=add_task)
 
+    # Wyświetlanie listy zadań
+    add_parser = subparsers.add_parser("list", help="Wyświetla listę wszystkich zadań.")
+    add_parser.set_defaults(func=list_tasks)
 
     args = parser.parse_args()
     
