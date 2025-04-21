@@ -80,13 +80,13 @@ def main():
     add_parser.set_defaults(func=add_task)
 
     # Delete task
-    add_parser = subparsers.add_parser("del", help="Deletes a specific task.")
-    add_parser.add_argument("task_id", help="Id of the task you want to delete.")
-    add_parser.set_defaults(func=del_task)
+    del_parser = subparsers.add_parser("del", help="Deletes a specific task.")
+    del_parser.add_argument("task_id", help="Id of the task you want to delete.")
+    del_parser.set_defaults(func=del_task)
 
     # Wyświetlanie listy zadań
-    add_parser = subparsers.add_parser("list", help="Wyświetla listę wszystkich zadań.")
-    add_parser.set_defaults(func=list_tasks)
+    list_parser = subparsers.add_parser("list", help="Wyświetla listę wszystkich zadań.")
+    list_parser.set_defaults(func=list_tasks)
 
     args = parser.parse_args()
     
