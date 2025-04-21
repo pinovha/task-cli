@@ -17,9 +17,9 @@ def add_task(args, status="in-progress"):
     write_json(task_data)
 
     print(""" 
-    Zadanie "{}" zostało zapisane.
-    Id: {}.
-    """.format(args.description, new_id))
+        Zadanie "{}" zostało zapisane.
+        Id: {}.
+        """.format(args.description, new_id))
 
 def del_task(args):
     task_id = args.task_id
@@ -32,9 +32,9 @@ def del_task(args):
         """)
         return
 
-    if task_id in task_data:
-        task_content = task_data[task_id]
-        task_data.pop(task_id)
+    task_content = task_data.pop(task_id, None)
+
+    if task_content:
         write_json(task_data)
         print("""
         Task "{}", with ID: {} has been deleted.
