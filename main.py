@@ -4,7 +4,9 @@ import json
 import datetime
 
 def add_task(args, status="todo"):
+    description = args.description
     task_data = read_json()
+
     if task_data:
         new_id = max(int(task_id) for task_id in task_data.keys()) + 1
     else:
@@ -22,13 +24,11 @@ def add_task(args, status="todo"):
     write_json(task_data)
 
     print(""" 
-        Zadanie "{}" zostało zapisane.
-        Id: {}.
-        """.format(args.description, new_id))
+        Task "{}" has been saved.
+        """.format(description, new_id))
 
 def del_task(args):
     task_id = args.id
-    
     task_data = read_json()
    
     if is_empty(task_data):
@@ -84,13 +84,21 @@ def is_empty(data):
         return True
     return False
 
-
 def list_tasks(args):
+    status = args.status
     task_data = read_json()
         
     if is_empty(task_data):
         return
+    
+    if args.status:
+        task_data = {task_id: task for task_id, task in task_data.items() if task["status"] == status}
   
+    if not task_data:
+        print("""
+        No tasks with status: {}
+        """.format(status))
+
     for task_id, task in task_data.items():
         updatedAt = task["updatedAt"]
         if updatedAt == None:
@@ -111,30 +119,24 @@ def mark_task(args):
         return
 
     task_id = args.id
-    status = args.status
 
-    if task_id in task_data:
-        task = task_data[task_id]
-        if status == "in-progress" or status == "done":
-            task["status"] = status
-
-            current_date = datetime.datetime.now().strftime("%d/%m/%Y")
-            task["updatedAt"] = current_date
- 
-            write_json(task_data)
-
-            print("""
-        Task "{}" marked as {}.
-            """.format(task["description"], status))
-        else:
-            print("""
-        Wrong mark, please use:
-        "in-progress" or "done"
-            """)
-    else:
+    if task_id not in task_data:
         print("""
         Task with ID: {} does not exist.
         """.format(task_id))
+        return
+
+    status = args.status
+    
+    task = task_data[task_id]
+    task["status"] = status
+    task["updatedAt"] = datetime.datetime.now().strftime("%d/%m/%Y")
+    
+    write_json(task_data)
+
+    print("""
+        Task "{}" marked as {}.
+        """.format(task["description"], status))
 
 def read_json():
     if os.path.exists("data.json") and os.path.getsize("data.json") > 0:
@@ -148,7 +150,7 @@ def write_json(data):
         json.dump(data, f, indent=4)
 
 def create_parser():
-    parser = argparse.ArgumentParser(prog="task", description="This program allows you to manage tasks.") 
+    parser = argparse.ArgumentParser(prog="task-cli", description="This program allows you to manage tasks.") 
     subparsers = parser.add_subparsers()
 
     # Add task
@@ -169,12 +171,13 @@ def create_parser():
 
     # Mark task
     mark_parser = subparsers.add_parser("mark", help="Marks the task.")
-    mark_parser.add_argument("status", help="Choose status: in-progress, done.")
+    mark_parser.add_argument("status", choices=["in-progress", "done"], help="Choose status: in-progress, done.")
     mark_parser.add_argument("id", help="Id of the task you want to mark.")
     mark_parser.set_defaults(func=mark_task)
 
-    # Wyświetlanie listy zadań
-    list_parser = subparsers.add_parser("list", help="Wyświetla listę wszystkich zadań.")
+    # List tasks
+    list_parser = subparsers.add_parser("list", help="Display all tasks.")
+    list_parser.add_argument("status", nargs="?", choices=["todo", "in-progress", "done"], help="Filter tasks by status.")
     list_parser.set_defaults(func=list_tasks)
     
     return parser
