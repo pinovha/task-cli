@@ -60,8 +60,7 @@ def update_task(args):
         old_description = task["description"]
         task["description"] = description
 
-        current_date = datetime.datetime.now().strftime("%d/%m/%Y")
-        task["updatedAt"] = current_date
+        task["updatedAt"] = datetime.datetime.now().strftime("%d/%m/%Y")
         
         write_json(task_data)
 
