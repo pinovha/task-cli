@@ -1,9 +1,10 @@
 from setuptools import setup
 
 setup(
-    name='Task_Tracker_CLI',
-    version='0.0',
-    description='Program do zarządzania zadaniami.',
+    name='Task Tracker CLI',
+    version='0.1',
+    author="Kamil",
+    description='This is a simple CLI task manager/ tracker written in Python.',
     py_modules=["main"],
     entry_points={
         'console_scripts': [
