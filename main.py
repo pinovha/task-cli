@@ -2,32 +2,31 @@ import argparse
 import os
 import json
 import datetime
+from typing import Dict
 
-def add_task(args, status="todo"):
-    description = args.description
+def add_task(args: argparse.Namespace) -> None:
+    description: str = args.description
     task_data = read_json()
 
     if task_data:
-        new_id = max(int(task_id) for task_id in task_data.keys()) + 1
+        new_id: str = str(max(int(task_id) for task_id in task_data.keys()) + 1)
     else:
-        new_id = 1
-
-    current_date = datetime.datetime.now().strftime("%d/%m/%Y")
+        new_id: str = "1"
 
     task_data[new_id] = {
-        "description": args.description,
-        "status": status, 
-        "createdAt": current_date,
-        "updatedAt": None
+        "description": description,
+        "status": "todo", 
+        "createdAt": datetime.datetime.now().strftime("%d/%m/%Y"),
+        "updatedAt": ""
     }
     
     write_json(task_data)
 
     print(""" 
-        Task "{}" has been saved.
+        Task "{}" has been saved. With id = {}.
         """.format(description, new_id))
 
-def del_task(args):
+def del_task(args: argparse.Namespace) -> None:
     task_id = args.id
     task_data = read_json()
    
@@ -100,7 +99,7 @@ def list_tasks(args):
 
     for task_id, task in task_data.items():
         updatedAt = task["updatedAt"]
-        if updatedAt == None:
+        if updatedAt == "":
             updatedAt = "No changes recorded."
         
         print((""" 
@@ -137,14 +136,14 @@ def mark_task(args):
         Task "{}" marked as {}.
         """.format(task["description"], status))
 
-def read_json():
+def read_json() -> Dict[str, Dict[str, str]]:
     if os.path.exists("data.json") and os.path.getsize("data.json") > 0:
         with open('data.json', 'r') as f:
             return json.load(f) 
     else:
         return {}
 
-def write_json(data):
+def write_json(data) -> None:
     with open("data.json", "w") as f:
         json.dump(data, f, indent=4)
 
