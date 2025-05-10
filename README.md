@@ -5,13 +5,13 @@ This project was built by following the specifications of the Task Tracker CLI c
 Clone the project:
 
 ```bash
-  git clone https://github.com/pinovha/task_tracker_cli.git
+  git clone https://github.com/pinovha/task-cli.git
 ```
 
 Go to the project directory:
 
 ```bash
-  cd task_tracker_cli
+  cd task-cli
 ```
 
 Install the project:
