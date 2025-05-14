@@ -1,4 +1,6 @@
 # Task Tracker CLI 
+Simple command-line interface to manage personal tasks.
+
 This project was built by following the specifications of the Task Tracker CLI challenge from [roadmap.sh](https://roadmap.sh/projects/task-tracker).
 ## Demo
 ![Demo](/images/demo.gif)
@@ -27,4 +29,3 @@ Run the CLI to see usage instructions and available options:
 ```bash
   task-cli
 ```
-
