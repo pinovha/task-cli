@@ -1,4 +1,4 @@
-from argparse import ArgumentParser
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 import os
 import json
 import datetime
@@ -133,8 +133,16 @@ class TaskManager:
             """)
 
 def create_parser() -> ArgumentParser:
-    parser = ArgumentParser(prog="task-cli", description="This program allows you to manage tasks.") 
-    subparsers = parser.add_subparsers(help= "Available commands.")
+    parser = ArgumentParser(prog="task-cli", description=("Simply manage and track your tasks.\n\n"
+                            "Examples:\n"
+                            "   task-cli add 'Task Name'\n"
+                            "   task-cli del 1\n"
+                            "   task-cli update 2 'Better Name'\n"
+                            "   task-cli mark 2 done\n"
+                            "   task-cli list\n"
+                            "   task-cli list in-progress\n"
+                            ),formatter_class=RawDescriptionHelpFormatter)
+    subparsers = parser.add_subparsers()
 
     # Add task
     add_parser = subparsers.add_parser("add", help="Add new task.")
@@ -153,13 +161,13 @@ def create_parser() -> ArgumentParser:
     update_parser.set_defaults(action="update") 
 
     # Mark task
-    mark_parser = subparsers.add_parser("mark", help="Marks the task.")
+    mark_parser = subparsers.add_parser("mark", help="Mark a specific task.")
     mark_parser.add_argument("id", type=int, help="Id of the task you want to mark.")
     mark_parser.add_argument("status", choices=STATUS_CHOICES)
     mark_parser.set_defaults(action="mark")
 
     # List tasks
-    list_parser = subparsers.add_parser("list", help="Display all tasks.")
+    list_parser = subparsers.add_parser("list", help="Display all tasks or display by status.")
     list_parser.add_argument("status", nargs="?", choices=STATUS_CHOICES, help="Filter tasks by status.")
     list_parser.set_defaults(action="list")
     
