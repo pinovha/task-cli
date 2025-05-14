@@ -103,7 +103,7 @@ class TaskManager:
             """)
             return
 
-        for task in self.tasks: 
+        for task in filtered_tasks: 
             updatedAt = task["updatedAt"] if task["updatedAt"] else "No changes recorded."
             
             print(f""" 
