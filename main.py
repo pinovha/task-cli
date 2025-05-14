@@ -103,12 +103,12 @@ class TaskManager:
             """)
             return
 
-        print(f"{'Task ID':<10}{'Description':<15}{'Status':<10}{'Created':<20}{'Last Modified':<20}")
+        print(f"{'ID':<5}{'Description':<20}{'Status':<15}{'Created':<20}{'Last Modified':<20}")
         print("="*80)
         for task in filtered_tasks: 
             updatedAt = datetime.fromisoformat(task["updatedAt"]).strftime(DATE_FORMAT) if task["updatedAt"] else "No changes recorded."
             
-            print(f"{task['id']:<10}{task['description']:<15}{task['status']:<10}"
+            print(f"{task['id']:<5}{task['description']:<20}{task['status']:<15}"
             f"{datetime.fromisoformat(task['createdAt']).strftime(DATE_FORMAT):<20}{updatedAt:<20}")
             
     def mark_task(self, task_id: int, status: str) -> None:
