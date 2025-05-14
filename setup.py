@@ -11,4 +11,7 @@ setup(
             "task-cli = main:main"
         ],
     },
+    tests_require=[
+        'pytest==8.3.5'
+    ],
 )
