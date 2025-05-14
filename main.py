@@ -1,7 +1,7 @@
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 import os
 import json
-import datetime
+from datetime import datetime
 from typing import Dict, Any, List
 
 DATA_FILE = "data.json"
@@ -43,7 +43,7 @@ class TaskManager:
             "id": new_id,
             "description": description,
             "status": "todo", 
-            "createdAt": datetime.datetime.now().strftime(DATE_FORMAT),
+            "createdAt": datetime.now().isoformat(),
             "updatedAt": None 
         })
         self._save_tasks()
@@ -76,7 +76,7 @@ class TaskManager:
             if task["id"] == task_id:
                 old_description = task["description"]
                 task["description"] = description
-                task["updatedAt"] = datetime.datetime.now().strftime(DATE_FORMAT)
+                task["updatedAt"] = datetime.now().isoformat()
                 self._save_tasks()
                 print(f"""
             Task with ID: {task_id} has been updated!
@@ -104,13 +104,13 @@ class TaskManager:
             return
 
         for task in filtered_tasks: 
-            updatedAt = task["updatedAt"] if task["updatedAt"] else "No changes recorded."
+            updatedAt = datetime.fromisoformat(task["updatedAt"]).strftime(DATE_FORMAT) if task["updatedAt"] else "No changes recorded."
             
             print(f""" 
             Id: {task["id"]}
             Description: "{task["description"]}" 
             Status: {task["status"]}
-            Created: {task["createdAt"]}
+            Created: {datetime.fromisoformat(task["createdAt"]).strftime(DATE_FORMAT)}
             Last Modified: {updatedAt}
             """)
             
@@ -121,7 +121,7 @@ class TaskManager:
         for task in self.tasks:
             if task["id"] == task_id:
                 task["status"] = status
-                task["updatedAt"] = datetime.datetime.now().strftime(DATE_FORMAT)
+                task["updatedAt"] = datetime.now().isoformat()
                 self._save_tasks()
                 print(f"""
             Task "{task["description"]}" marked as {status}.
